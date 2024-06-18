@@ -1,5 +1,5 @@
 import yaml
-# import requests
+import requests
 import base64
 from pathlib import Path
 import os
