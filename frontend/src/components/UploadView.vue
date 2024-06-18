@@ -7,10 +7,11 @@
       ref="fileInput"
       @change="handleFileChange"
       accept="image/*"
+      capture="environment" 
       style="display: none;"
     />
     <b-button pill id="select-button" @click="selectFile" variant="primary" class="mb-3">
-      Choose an Image
+      Take a Picture 
     </b-button>
     <b-button
       pill
