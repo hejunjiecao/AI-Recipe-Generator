@@ -1,16 +1,26 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import UploadView from '../components/UploadView.vue';
+import Recipe from '../components/Recipe.vue';
 
 Vue.use(VueRouter);
 
-export default new VueRouter({
-    mode: 'history',
-    routes: [
-        {
-            path: '/',
-            name: 'UploadView',
-            component: UploadView,
-        },
-    ],
+const routes = [
+  {
+    path: '/',
+    name: 'UploadView',
+    component: UploadView,
+  },
+  {
+    path: '/recipe',
+    name: 'Recipe',
+    component: Recipe,
+  },
+];
+
+const router = new VueRouter({
+  mode: 'history',
+  routes,
 });
+
+export default router;
