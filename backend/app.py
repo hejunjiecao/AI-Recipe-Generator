@@ -10,8 +10,10 @@ CORS(app)
 
 UPLOAD_FOLDER = 'uploads'
 save_path = ''
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
-@app.route("/upload", methods=["POST"])
+@app.route("/uploads", methods=["POST"])
 def upload_image():
     if 'file' not in request.files:
         return jsonify({"error": "No file part"})
@@ -61,5 +63,25 @@ def upload_image():
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
+@app.route('/recipe', methods=['GET'])
+def get_recipe():
+    recipe = {
+        "name": "鱼香肉丝",
+        "totalTime": "30分钟",
+        "ingredients": [
+            {"name": "猪肉", "amount": "200g"},
+            {"name": "青椒", "amount": "100g"},
+            {"name": "胡萝卜", "amount": "50g"}
+        ],
+        "steps": [
+            "将猪肉切丝。",
+            "将青椒和胡萝卜切丝。",
+            "锅中放油，加入猪肉炒熟。",
+            "加入青椒和胡萝卜，翻炒均匀。"
+        ]
+    }
+    return jsonify(recipe)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run(host='0.0.0.0', port=5008, debug=True)
