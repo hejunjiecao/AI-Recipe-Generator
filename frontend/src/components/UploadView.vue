@@ -6,11 +6,11 @@
       ref="fileInput"
       @change="handleFileChange"
       accept="image/*"
-      capture="environment" 
+      capture="environment"
       style="display: none;"
     />
     <b-button pill id="select-button" @click="selectFile" variant="primary" class="mb-3">
-      Take a Picture 
+      Take a Picture
     </b-button>
     <b-button
       pill
@@ -54,14 +54,15 @@ export default {
       const formData = new FormData();
       formData.append('file', this.file);
 
-      axios.post('http://10.103.13.3:5008/upload', formData, {
+      axios.post('http://192.168.179.3:5008/uploads', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
-      .then(() => {  
-        this.file = null; 
-        this.showRecipe = true; 
+      .then((response) => {
+		console.log(response.data.message);
+        this.file = null;
+        this.showRecipe = true;
       })
       .catch(err => {
         console.error(err);
@@ -73,7 +74,7 @@ export default {
 
 <style>
 html, body, #upload {
-  height: 100%; 
+  height: 100%;
   margin: 0;
   padding: 0;
   font-family: 'Lato', sans-serif;
@@ -90,11 +91,11 @@ html, body, #upload {
 }
 
 #select-button {
-  width: 200px; 
-  margin-top: 20px; 
+  width: 200px;
+  margin-top: 20px;
 }
 
 #upload-button {
-  width: 150px; 
+  width: 150px;
 }
 </style>
