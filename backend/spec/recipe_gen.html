@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Recipe</title>
+</head>
+<body>
+    <h1>Generate Recipe</h1>
+    <form id="recipeForm">
+        <label for="ingredients">Ingredients (JSON format):</label><br>
+        <textarea id="ingredients" name="ingredients" rows="10" cols="50">{"tomato": "2 pieces", "cheese": "100 grams", "basil": "5 leaves"}</textarea><br>
+        <button type="button" onclick="generateRecipe()">Generate Recipe</button>
+    </form>
+    <h2>Recipe:</h2>
+    <pre id="recipeOutput"></pre>
+
+    <script>
+        async function generateRecipe() {
+            const ingredients = document.getElementById('ingredients').value;
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: ingredients
+            });
+
+            const data = await response.json();
+            document.getElementById('recipeOutput').innerText = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>
