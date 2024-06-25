@@ -18,6 +18,7 @@ def generate_recipe_from_ingredients(ingredients, style):
 		result, reply = gpt.process_response(myGPT.query(msgs), myGPT.model)
 		if not result:
 			print("Error when generating recipe! See the deatils below.")
-			return ["Error from recipe generator"]
+			return ['{"ingredients":' + f"{ingredients}" + ',"error":"Error from recipe generator"}']
 		three_res.append(reply)
+		three_res[i].ingredients = ingredients
 	return three_res

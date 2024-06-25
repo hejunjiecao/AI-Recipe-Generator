@@ -8,9 +8,13 @@
         <div class="ingredients">
           <h3>Ingredients</h3>
           <ul>
-            <li v-for="ingredient in recipe.ingredients" :key="ingredient.name">
+            <!-- <li v-for="ingredient in recipe.ingredients" :key="ingredient.name">
               {{ ingredient.name }}: <strong>{{ ingredient.amount }}</strong>
+            </li> -->
+			<li v-for="(amount, ingredient) in recipe.ingredients" :key="ingredient">
+				{{ ingredient }}: {{ amount }}
             </li>
+			<h3>Error: {{ recipe.error }}</h3>
           </ul>
         </div>
         <div class="steps">
@@ -24,10 +28,10 @@
       </div>
     </div>
   </template>
-  
+
   <script>
   import axios from 'axios';
-  
+
   export default {
     name: 'Recipe',
     data() {
@@ -41,16 +45,17 @@
     methods: {
       async fetchRecipe() {
         try {
-          const response = await axios.get('http://10.103.13.3:5008/recipe');
+          const response = await axios.get('http://192.168.179.3:5008/generate');
           this.recipe = response.data;
-        } catch (error) {
+        }catch (error) {
           console.error('Error fetching recipe:', error);
         }
+		console.log(this.recipe);
       }
     }
   };
   </script>
-  
+
   <style scoped>
   .recipe {
     background: #ffffff;
@@ -61,7 +66,7 @@
     width: 100%;
     margin-top: 10px; /* 向上调整与上传按钮的间距 */
   }
-  
+
   .recipe-header {
     display: flex;
     justify-content: space-between;
@@ -70,33 +75,33 @@
     padding-bottom: 10px;
     margin-bottom: 20px;
   }
-  
+
   .recipe-name {
     font-size: 2em;
     font-weight: bold;
   }
-  
+
   .recipe-time {
     font-size: 1em;
     color: #999;
   }
-  
+
   .ingredients, .steps {
     margin-bottom: 20px;
   }
-  
+
   h3 {
     font-size: 1.5em;
     border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
     margin-bottom: 10px;
   }
-  
+
   ul {
     list-style: none;
     padding: 0;
   }
-  
+
   ul li::before {
     content: '•';
     color: #007BFF;
@@ -105,7 +110,7 @@
     width: 1em;
     margin-left: -1em;
   }
-  
+
   ol {
     list-style: decimal inside;
     padding: 0;

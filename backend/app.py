@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
+import json
 
 import setting
 import gpt
@@ -9,6 +10,7 @@ import recipe_generator as rcp_gen
 app = Flask(__name__)
 CORS(app)
 
+global_ingredients = {}
 UPLOAD_FOLDER = 'uploads'
 save_path = ''
 if not os.path.exists(UPLOAD_FOLDER):
@@ -56,7 +58,10 @@ def upload_image():
     if not result:
         print("Error! See the deatils below.")
         return jsonify({"message": reply})
+    # TEST: frontend image to backend recipes
     print(reply)
+    global_ingredients = reply
+    # END OF TEST: frontend image to backend recipes
     return jsonify({"message": reply})
     # return jsonify({"message": "File successfully uploaded", "filename": file.filename})
 
@@ -65,30 +70,40 @@ def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
 
-@app.route("/generate", methods=["POST"])
+@app.route("/generate", methods=["GET"])
 def generate_recipe():
-    data = request.get_json()
-
-    if not data:
-        return jsonify({"error": "No input data provided"}), 400
-
     # Assume the data contains a dictionary of ingredients
     # example:
     # {"tomato": "2 pieces", "cheese": "100 grams"}
-    # ingredients = data.get("ingredients", {})
 
-    # if not ingredients:
-    #     return jsonify({"error": "No ingredients provided"}), 400
+    # TEST: frontend image to backend recipes
+    # data = request.get_json()
 
-    style = data.get("style",{})
+    # if not data:
+    #     return jsonify({"error": "No input data provided"}), 400
 
-    if not style:
-        style = "any"
+    # style = data.get("style",{})
+    # if not style:
+    #     style = "any"
+
+    data = global_ingredients
+    data = {"tomato": "2 pieces", "cheese": "100 grams"}
+    style = "any"
+    # END OF TEST: frontend image to backend recipes
+
 
     # Process ingredients to generate a recipe
-    recipe = rcp_gen.generate_recipe_from_ingredients(data, style)
+    three_recipes = rcp_gen.generate_recipe_from_ingredients(data, style)
+    # TEST: frontend image to backend recipes
+    print(three_recipes[0])
+    # recipe = three_recipes[0].replace("'", '"')
+    # test_obj = json.loads(recipe)
+    test_recipe = three_recipes[0]
+    return jsonify({"recipe": test_recipe})
+    # END OF TEST: frontend image to backend recipes
 
-    return jsonify({"recipe": recipe})
+
+    # return jsonify({"recipe": three_recipes[0]})
 
 # # TEST
 # @app.route('/recipe', methods=['GET'])
