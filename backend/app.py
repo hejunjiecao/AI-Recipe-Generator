@@ -96,17 +96,17 @@ def generate_recipe():
     three_recipes = rcp_gen.generate_recipe_from_ingredients(data, style)
     # TEST: frontend image to backend recipes
     print(three_recipes[0])
-    # recipe = three_recipes[0].replace("'", '"')
-    # test_obj = json.loads(recipe)
-    test_recipe = three_recipes[0]
-    return jsonify({"recipe": test_recipe})
+    recipe = three_recipes[0].replace("'", '"')
+    test_obj = json.loads(recipe)
+    # test_recipe = three_recipes[0]
+    return jsonify(test_obj)
     # END OF TEST: frontend image to backend recipes
 
 
     # return jsonify({"recipe": three_recipes[0]})
 
 # # TEST
-# @app.route('/recipe', methods=['GET'])
+# @app.route('/generate', methods=['GET'])
 # def get_recipe():
 #     recipe = {
 #         "name": "鱼香肉丝",
