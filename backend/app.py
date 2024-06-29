@@ -10,7 +10,7 @@ import recipe_generator as rcp_gen
 app = Flask(__name__)
 CORS(app)
 
-global_ingredients = {}
+# global_ingredients = {}
 UPLOAD_FOLDER = 'uploads'
 save_path = ''
 if not os.path.exists(UPLOAD_FOLDER):
@@ -36,7 +36,7 @@ def upload_image():
     msgs = []
     insctruct_prompt = "Your task is to recognize the annotated food ingrediants in the picture. \
         If there is no annotation, recongize all the food ingrediants. \
-        As answer you generate a JSON object with their names as keys and their quantity as values."
+        As answer you generate one pure JSON object with their names as keys and their quantity as values."
     user_msg= gpt.GPTMsg('user', insctruct_prompt)
     example_prompt = 'I will give you one example. \
         Q1: Recognize the annotated food ingrediants in the first picture. \
@@ -59,7 +59,8 @@ def upload_image():
         print("Error! See the deatils below.")
         return jsonify({"message": reply})
     # TEST: frontend image to backend recipes
-    print(reply)
+    # print(reply)
+    global global_ingredients
     global_ingredients = reply
     # END OF TEST: frontend image to backend recipes
     return jsonify({"message": reply})
@@ -87,7 +88,9 @@ def generate_recipe():
     #     style = "any"
 
     data = global_ingredients
-    data = {"tomato": "2 pieces", "cheese": "100 grams"}
+    # data = dirty_data.replaceAll("`","")
+    # data = data.replace("json","")
+    # data = {"tomato": "2 pieces", "cheese": "100 grams"}
     style = "any"
     # END OF TEST: frontend image to backend recipes
 
@@ -95,10 +98,14 @@ def generate_recipe():
     # Process ingredients to generate a recipe
     three_recipes = rcp_gen.generate_recipe_from_ingredients(data, style)
     # TEST: frontend image to backend recipes
-    print(three_recipes[0])
-    recipe = three_recipes[0].replace("'", '"')
-    test_obj = json.loads(recipe)
+    # print(three_recipes[0])
+    # print(type(three_recipes[0]))
+    # recipe = three_recipes[0].replace("'", '"')
+    cleaned_str = three_recipes[0][7:-3]
+    print(cleaned_str)
+    test_obj = json.loads(cleaned_str)
     # test_recipe = three_recipes[0]
+    # test_obj.ingredients = data
     return jsonify(test_obj)
     # END OF TEST: frontend image to backend recipes
 

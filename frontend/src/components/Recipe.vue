@@ -1,8 +1,8 @@
 <template>
     <div class="recipe" v-if="recipe">
       <div class="recipe-header">
-        <h2 class="recipe-name">{{ recipe.name }}</h2>
-        <p class="recipe-time">Total Time: {{ recipe.totalTime }}</p>
+        <h2 class="recipe-name">{{ recipe.dishName }}</h2>
+        <p class="recipe-time">Total Time: {{ recipe.timeToPrepare }}</p>
       </div>
       <div class="recipe-body">
         <div class="ingredients">
@@ -14,13 +14,13 @@
 			<li v-for="(amount, ingredient) in recipe.ingredients" :key="ingredient">
 				{{ ingredient }}: {{ amount }}
             </li>
-			<h3>Error: {{ recipe.error }}</h3>
+			<!-- <h3>Error: {{ recipe.error }}</h3> -->
           </ul>
         </div>
         <div class="steps">
           <h3>Steps</h3>
           <ol>
-            <li v-for="(step, index) in recipe.steps" :key="index">
+            <li v-for="(step, index) in recipe.Steps" :key="index">
               {{ step }}
             </li>
           </ol>
@@ -45,7 +45,7 @@
     methods: {
       async fetchRecipe() {
         try {
-          const response = await axios.get('http://192.168.179.3:5008/generate');
+          const response = await axios.get('http://DESKTOP-503B89S:5008/generate');
           this.recipe = response.data;
         }catch (error) {
           console.error('Error fetching recipe:', error);
