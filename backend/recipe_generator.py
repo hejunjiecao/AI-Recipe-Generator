@@ -5,27 +5,28 @@ import gpt
 
 def generate_recipe_from_ingredients(ingredients, style):
 	three_res = []
-	three_res_jsosobj = []
 	msgs = []
-	rcp_prompt_sys = 'You are a excellent chef and familiar with different food style. You are not only good at developing new dishes.'
-	rcp_prompt_usr = f"You will be given a JSON object for food ingredients with fields for their names and quantity.\nYou will create a recipe for a dish in {style} sytle using the following given ingredients:\n```{ingredients}```\nYour reply will be a JSON object with fields for 'dishName', 'timeToPrepare' and 'Steps'.\n\t'dishName' field represents the name of the generated dish. \n\t'timeToPrepare' indicates the total time required to prepare and cook the dish.\n\t'Steps' is a list of steps that describe the cooking process.\nEach step is a string detailing a specific action to be taken."
-	# TEST user_prompt
-	# print(rcp_prompt_usr)
-	# END OF TEST user_prompt
+	rcp_prompt_sys = 'You are a excellent chef and familiar with different food style. You are not only good at existing food recites, but also developing new dishes.'
+
+	rcp_prompt_usr = ""
+	if ingredients == "[]":
+		rcp_prompt_usr = f"You will create a recipe for a dish in {style} sytle using random food ingredients"
+	else:
+		rcp_prompt_usr = f"You will be given a list of food ingredients with fields for their names and quantity.\nYou will create a recipe for a dish in {style} sytle using the following given ingredients:\n{ingredients}\n"
+	rcp_prompt_usr += "Your reply will be in JSON format. The reply will only be a JSON object, starting with '''json and and with ''', with fields for 'dishName', 'timeToPrepare', 'ingredients' and 'Steps'.\n\t'dishName' field represents the name of the generated dish. \n\t'timeToPrepare' indicates the total time required to prepare and cook the dish.\n\t\'ingredients' is dictionary object of food ingredients needed for this dish, with name of the food ingredients as keys and their required amount as values.\n\t'Steps' is a list of steps that describe the cooking process.\nEach step is a string detailing a specific action to be taken without enumeration markers."
+
 	sys_msg = gpt.GPTMsg('system', rcp_prompt_sys)
 	usr_msg = gpt.GPTMsg('user', rcp_prompt_usr)
 	msgs.append(sys_msg)
 	msgs.append(usr_msg)
-	myGPT = gpt.MyGPT(setting.configs)
+
+	# Generate three recipes using different temperature 
 	for i in range(3):
+		setting.configs["temperature"]  = str(1 + (0.5 * i))
+		myGPT = gpt.MyGPT(setting.configs)
 		result, reply = gpt.process_response(myGPT.query(msgs), myGPT.model)
 		if not result:
-			print("Error when generating recipe! See the deatils below.")
-			return ['{"ingredients":' + f"{ingredients}" + ',"error":"Error from recipe generator"}']
+			print("Error when generating recipe %i! See the deatils below.", (i+1))
+			reply = ""
 		three_res.append(reply)
-		# three_res_tmp = three_res[i].replace("'", '"')
-		# three_res_jsosobj_tmp = json.loads(three_res_tmp)
-		# three_res_jsosobj.append(three_res_jsosobj_tmp)
-		# three_res_jsosobj[i].ingredients = ingredients
-	# return three_res_jsosobj
 	return three_res
