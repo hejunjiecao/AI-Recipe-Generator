@@ -1,5 +1,3 @@
-import json
-
 import setting
 import gpt
 
@@ -14,26 +12,21 @@ def generate_recipe_from_ingredients(ingredients, style):
 	else:
 		rcp_prompt_usr = f"You will be given a list of food ingredients with fields for their names and quantity.\nYou will create a recipe for a dish in {style} sytle using the following given ingredients:\n{ingredients}\n"
 	rcp_prompt_usr += "Your reply will be in JSON format. The reply will only be a JSON object, starting with '''json and and with ''', with fields for 'dishName', 'timeToPrepare', 'ingredients' and 'Steps'.\n\t'dishName' field represents the name of the generated dish. \n\t'timeToPrepare' indicates the total time required to prepare and cook the dish.\n\t\'ingredients' is dictionary object of food ingredients needed for this dish, with name of the food ingredients as keys and their required amount as values.\n\t'Steps' is a list of steps that describe the cooking process.\nEach step is a string detailing a specific action to be taken without enumeration markers."
-	# TEST user_prompt
-	# print(rcp_prompt_usr)
-	# END OF TEST user_prompt
 	sys_msg = gpt.GPTMsg('system', rcp_prompt_sys)
 	usr_msg = gpt.GPTMsg('user', rcp_prompt_usr)
 	msgs.append(sys_msg)
 	msgs.append(usr_msg)
-	# myGPT = gpt.MyGPT(setting.configs)
+
 	for i in range(3):
-		setting.configs["temperature"]  = str(1 + (0.5 * i))
+		setting.configs["temperature"]  = 1 + (0.5 * i)
 		myGPT = gpt.MyGPT(setting.configs)
+		print(setting.configs)
 		result, reply = gpt.process_response(myGPT.query(msgs), myGPT.model)
 		if not result:
-			print("Error when generating recipe %i! See the deatils below.", (i+1))
-			# return [reply]
+			print("Error when generating recipe %i! See the deatils below." % (i+1))
 			reply = ""
 		three_res.append(reply)
-		# three_res_tmp = three_res[i].replace("'", '"')
-		# three_res_jsosobj_tmp = json.loads(three_res_tmp)
-		# three_res_jsosobj.append(three_res_jsosobj_tmp)
-		# three_res_jsosobj[i].ingredients = ingredients
-	# return three_res_jsosobj
 	return three_res
+
+if __name__ == '__main__':
+	three_res = generate_recipe_from_ingredients(ingredients = '["grapes","tofu","cheese spread"]', style="any")
