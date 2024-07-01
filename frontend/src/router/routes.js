@@ -12,7 +12,7 @@ const routes = [
     component: UploadView,
   },
   {
-    path: '/recipe',
+    path: '/generate',
     name: 'Recipe',
     component: Recipe,
   },

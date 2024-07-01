@@ -74,8 +74,6 @@ def process_response(response, GPTModel):
   # Intended behaviour of this function:
   # returns True, "textual reply from GPT", and prints the cost at the same time
   # OR returns False, "reason why the error occurs"
-  print("response: ")
-  print(response)
   if "error" not in response:
     usage = response["usage"]
     prompt_tokens = usage["prompt_tokens"]
