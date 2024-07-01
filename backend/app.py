@@ -36,31 +36,33 @@ def upload_image():
     msgs = []
     insctruct_prompt = "Your task is to recognize the annotated food ingrediants in the picture. \
         If there is no annotation, recongize all the food ingrediants. \
-        As answer you generate one pure JSON object with their names as keys and their quantity as values."
+        As reply only list the recoginzed food ingredients quoted in square brackets and each of them is quoted with double quotes and seperated with a comma. If there are only non-food items recognized, reply me only []"
     user_msg= gpt.GPTMsg('user', insctruct_prompt)
-    example_prompt = 'I will give you one example. \
-        Q1: Recognize the annotated food ingrediants in the first picture. \
-            If there is no annotation, recongize all the food ingrediants. \
-        A1: {"aubergine": "1 piece", "chicken wings": "600 gram"} \
-        Q2: Recognize the annotated food ingrediants in the second picture. \
-            If there is no annotation, recongize all the food ingrediants. \
-        A2:{"aubergine": "1 piece","romaine lettuce": "3 pieces","chicken wings": "600 grams","red bell pepper": "1 piece"}'
-    example_msg = gpt.GPTMsg('user', example_prompt, [setting.Path(setting.root_dir) / UPLOAD_FOLDER / 'origin' / 'test1.jpg', setting.Path(setting.root_dir) / UPLOAD_FOLDER / 'origin' / 'test2.jpg'])
-    task_prompt = 'Q1: Recognize the annotated food ingrediants in the first picture. \
+    example_prompt = 'I will give you two examples. \
+        Q1: Recognize the annotated food ingrediants in first picture. \
         If there is no annotation, recongize all the food ingrediants. \
-        A1:'
+        A1: ["aubergine","chicken wings"] \
+        Q2: Recognize the annotated food ingrediants in second picture. \
+        If there is no annotation, recongize all the food ingrediants. \
+        A2: ["aubergine","romaine lettuce","chicken wings","red bell pepper"]'
+    example_msg = gpt.GPTMsg('user', example_prompt, [setting.Path(setting.root_dir) / UPLOAD_FOLDER / 'origin' / 'test1.jpg', setting.Path(setting.root_dir) / UPLOAD_FOLDER / 'origin' / 'test2.jpg'])
+    task_prompt = 'Q3: Recognize the annotated food ingrediants in second picture. \
+        If there is no annotation, recongize all the food ingrediants. \
+        A3:'
     task_msg = gpt.GPTMsg('user', task_prompt, [setting.Path(setting.root_dir) / save_path])
     msgs.append(user_msg)
     msgs.append(example_msg)
     msgs.append(task_msg)
 
+    global global_ingredients
+
     result, reply = gpt.process_response(myGPT.query(msgs), myGPT.model)
     if not result:
-        print("Error! See the deatils below.")
-        return jsonify({"message": reply})
+        print("Error! See the details below.")
+        # return jsonify({"message": reply})
     # TEST: frontend image to backend recipes
     # print(reply)
-    global global_ingredients
+
     global_ingredients = reply
     # END OF TEST: frontend image to backend recipes
     return jsonify({"message": reply})
@@ -73,65 +75,48 @@ def uploaded_file(filename):
 
 @app.route("/generate", methods=["GET"])
 def generate_recipe():
-    # Assume the data contains a dictionary of ingredients
+    # TODO: Assume the data contains a dictionary of ingredients
     # example:
-    # {"tomato": "2 pieces", "cheese": "100 grams"}
+    # {"style": "chinese", "ingredients": ["tomato","salad"]}
 
     # TEST: frontend image to backend recipes
     # data = request.get_json()
 
+    # data = global_ingredients
+    data = '["grapes","tofu","cheese spread"]'
     # if not data:
     #     return jsonify({"error": "No input data provided"}), 400
-
     # style = data.get("style",{})
     # if not style:
     #     style = "any"
+    style = "any"
 
-    data = global_ingredients
+
     # data = dirty_data.replaceAll("`","")
     # data = data.replace("json","")
     # data = {"tomato": "2 pieces", "cheese": "100 grams"}
-    style = "any"
     # END OF TEST: frontend image to backend recipes
 
 
     # Process ingredients to generate a recipe
     three_recipes = rcp_gen.generate_recipe_from_ingredients(data, style)
-    # TEST: frontend image to backend recipes
-    # print(three_recipes[0])
-    # print(type(three_recipes[0]))
-    # recipe = three_recipes[0].replace("'", '"')
-    cleaned_str = three_recipes[0][7:-3]
-    print(cleaned_str)
-    test_obj = json.loads(cleaned_str)
-    # test_recipe = three_recipes[0]
-    # test_obj.ingredients = data
-    return jsonify(test_obj)
-    # END OF TEST: frontend image to backend recipes
+    # # TEST: frontend image to backend recipes
+    # # print(three_recipes[0])
+    # # print(type(three_recipes[0]))
+    # # recipe = three_recipes[0].replace("'", '"')
+    three_recipe_objs = []
+    for i in range(3):
+        cleaned = three_recipes[i][7:-3]
+        # print(cleaned)
+        three_recipe_objs.append(json.loads(cleaned))
+    # # test_recipe = three_recipes[0]
+    # # test_obj.ingredients = data
+    # return jsonify(test_obj)
+    # # END OF TEST: frontend image to backend recipes
+    return jsonify({"recipes": three_recipe_objs})
 
 
     # return jsonify({"recipe": three_recipes[0]})
-
-# # TEST
-# @app.route('/generate', methods=['GET'])
-# def get_recipe():
-#     recipe = {
-#         "name": "鱼香肉丝",
-#         "totalTime": "30分钟",
-#         "ingredients": [
-#             {"name": "猪肉", "amount": "200g"},
-#             {"name": "青椒", "amount": "100g"},
-#             {"name": "胡萝卜", "amount": "50g"}
-#         ],
-#         "steps": [
-#             "将猪肉切丝。",
-#             "将青椒和胡萝卜切丝。",
-#             "锅中放油，加入猪肉炒熟。",
-#             "加入青椒和胡萝卜，翻炒均匀。"
-#         ]
-#     }
-#     return jsonify(recipe)
-# # END OF TEST
 
 # TEST: recipe_generator
 @app.route("/")
