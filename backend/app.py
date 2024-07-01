@@ -3,8 +3,7 @@ from flask_cors import CORS
 import os
 import json
 
-import setting
-import gpt
+import recognizer as recog
 import recipe_generator as rcp_gen
 
 app = Flask(__name__)
@@ -32,41 +31,13 @@ def upload_image():
 
     # 打印保存路径
     print(f"File saved to: {save_path}")
-    myGPT = gpt.MyGPT(setting.configs)
-    msgs = []
-    insctruct_prompt = "Your task is to recognize the annotated food ingrediants in the picture. \
-        If there is no annotation, recongize all the food ingrediants. \
-        As reply only list the recoginzed food ingredients quoted in square brackets and each of them is quoted with double quotes and seperated with a comma. If there are only non-food items recognized, reply me only []"
-    user_msg= gpt.GPTMsg('user', insctruct_prompt)
-    example_prompt = 'I will give you two examples. \
-        Q1: Recognize the annotated food ingrediants in first picture. \
-        If there is no annotation, recongize all the food ingrediants. \
-        A1: ["aubergine","chicken wings"] \
-        Q2: Recognize the annotated food ingrediants in second picture. \
-        If there is no annotation, recongize all the food ingrediants. \
-        A2: ["aubergine","romaine lettuce","chicken wings","red bell pepper"]'
-    example_msg = gpt.GPTMsg('user', example_prompt, [setting.Path(setting.root_dir) / UPLOAD_FOLDER / 'origin' / 'test1.jpg', setting.Path(setting.root_dir) / UPLOAD_FOLDER / 'origin' / 'test2.jpg'])
-    task_prompt = 'Q3: Recognize the annotated food ingrediants in second picture. \
-        If there is no annotation, recongize all the food ingrediants. \
-        A3:'
-    task_msg = gpt.GPTMsg('user', task_prompt, [setting.Path(setting.root_dir) / save_path])
-    msgs.append(user_msg)
-    msgs.append(example_msg)
-    msgs.append(task_msg)
 
+	# recognize
     global global_ingredients
-
-    result, reply = gpt.process_response(myGPT.query(msgs), myGPT.model)
-    if not result:
-        print("Error! See the details below.")
-        # return jsonify({"message": reply})
-    # TEST: frontend image to backend recipes
-    # print(reply)
-
+    reply = recog.recognize_food_ingredients(UPLOAD_FOLDER, save_path)
     global_ingredients = reply
-    # END OF TEST: frontend image to backend recipes
+
     return jsonify({"message": reply})
-    # return jsonify({"message": "File successfully uploaded", "filename": file.filename})
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
