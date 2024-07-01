@@ -1,31 +1,38 @@
 <template>
-    <div class="recipe" v-if="recipe">
-      <div class="recipe-header">
-        <h2 class="recipe-name">{{ recipe.dishName }}</h2>
-        <p class="recipe-time">Total Time: {{ recipe.timeToPrepare }}</p>
-      </div>
-      <div class="recipe-body">
-        <div class="ingredients">
-          <h3>Ingredients</h3>
-          <ul>
-            <!-- <li v-for="ingredient in recipe.ingredients" :key="ingredient.name">
-              {{ ingredient.name }}: <strong>{{ ingredient.amount }}</strong>
-            </li> -->
-			<li v-for="(amount, ingredient) in recipe.ingredients" :key="ingredient">
-				{{ ingredient }}: {{ amount }}
-            </li>
-			<!-- <h3>Error: {{ recipe.error }}</h3> -->
-          </ul>
-        </div>
-        <div class="steps">
-          <h3>Steps</h3>
-          <ol>
-            <li v-for="(step, index) in recipe.Steps" :key="index">
-              {{ step }}
-            </li>
-          </ol>
-        </div>
-      </div>
+    <div v-if="recipes">
+		<div v-for="recipe in recipes" :key="recipe.dishName" class="recipe">
+			<div class="recipe-header">
+				<h2 class="recipe-name">{{ recipe.dishName }}</h2>
+				<p class="recipe-time">Total Time: {{ recipe.timeToPrepare }}</p>
+			</div>
+			<div class="recipe-body">
+				<div class="ingredients">
+				<h3>Ingredients</h3>
+				<ul>
+					<!-- <li v-for="ingredient in recipe.ingredients" :key="ingredient.name">
+					{{ ingredient.name }}: <strong>{{ ingredient.amount }}</strong>
+					</li> -->
+					<li v-for="(amount, ingredient) in recipe.ingredients" :key="ingredient">
+						{{ ingredient }}: {{ amount }}
+					</li>
+				</ul>
+				<!-- <ul>
+                    <li v-for="(value, key) in recipe.ingredients" :key="key">{{ key }}: {{ value }}</li>
+                </ul> -->
+				</div>
+				<div class="steps">
+				<h3>Steps</h3>
+				<ol>
+					<!-- <li v-for="(step, index) in recipe.Steps" :key="index">
+					{{ step }}
+					</li> -->
+					<li v-for="step in recipe.Steps" :key="step">
+						{{ step }}
+					</li>
+				</ol>
+				</div>
+			</div>
+		</div>
     </div>
   </template>
 
@@ -36,7 +43,7 @@
     name: 'Recipe',
     data() {
       return {
-        recipe: null,
+        recipes: null,
       };
     },
     created() {
@@ -46,11 +53,11 @@
       async fetchRecipe() {
         try {
           const response = await axios.get('http://DESKTOP-503B89S:5008/generate');
-          this.recipe = response.data;
+          this.recipes = response.data.recipes;
         }catch (error) {
           console.error('Error fetching recipe:', error);
         }
-		console.log(this.recipe);
+		console.log(this.recipes);
       }
     }
   };
