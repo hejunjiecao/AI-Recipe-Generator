@@ -20,7 +20,6 @@ def generate_recipe_from_ingredients(ingredients, style):
 	for i in range(3):
 		setting.configs["temperature"]  = 1 + (0.5 * i)
 		myGPT = gpt.MyGPT(setting.configs)
-		print(setting.configs)
 		result, reply = gpt.process_response(myGPT.query(msgs), myGPT.model)
 		if not result:
 			print("Error when generating recipe %i! See the deatils below." % (i+1))
