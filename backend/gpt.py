@@ -81,17 +81,7 @@ def process_response(response, GPTModel):
     prompt_tokens = usage["prompt_tokens"]
     completion_tokens = usage["completion_tokens"]
 
-    if GPTModel == 'gpt-3.5-turbo':
-      prompt_cost = prompt_tokens / 1000000 * 0.5
-      response_cost = completion_tokens / 1000000 * 1.5
-      print(f"This round costs ${'{0:.5f}'.format(prompt_cost + response_cost)}")
-
-    elif GPTModel == 'gpt-4-turbo':
-      prompt_cost = prompt_tokens / 1000000 * 10
-      response_cost = completion_tokens / 1000000 * 30
-      print(f"This round costs ${'{0:.5f}'.format(prompt_cost + response_cost)}")
-
-    elif GPTModel == 'gpt-4o':
+    if GPTModel == 'gpt-4o':
       prompt_cost = prompt_tokens / 1000000 * 5
       response_cost = completion_tokens / 1000000 * 15
       print(f"This round costs ${'{0:.5f}'.format(prompt_cost + response_cost)}")
