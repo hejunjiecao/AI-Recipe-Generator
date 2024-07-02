@@ -1,3 +1,5 @@
+import re
+
 import setting
 import gpt
 
@@ -28,4 +30,9 @@ def recognize_food_ingredients(upload_folder, save_path):
     if not result:
         print("Error! See the details below.")
     print(reply)
-    return (reply)
+    match = re.search(r'\[.*\]', reply)
+    if match:
+        cleaned_reply = match.group(0)
+    else:
+        cleaned_reply = "[]"
+    return (cleaned_reply)
