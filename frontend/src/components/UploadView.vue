@@ -54,7 +54,7 @@ export default {
       const formData = new FormData();
       formData.append('file', this.file);
 
-      axios.post('http://192.168.179.3:5008/uploads', formData, {
+      axios.post('http://DESKTOP-503B89S:5008/uploads', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
