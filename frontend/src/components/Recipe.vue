@@ -10,11 +10,12 @@
         <ul>
           <!-- <li v-for="(ingredient, index) in recipe.ingredients" :key="index">
             {{ ingredient.name }}: <strong>{{ ingredient.amount }}</strong>
-          </li> -->
-			<li v-for="(amount, ingredient) in recipe.ingredients" :key="ingredient">
+          </li>-->
+          <li v-for="(amount, ingredient) in recipe.ingredients" :key="ingredient">
 				{{ ingredient }}: {{ amount }}
 			</li>
         </ul>
+        
 
       </div>
       <div class="steps">
@@ -31,7 +32,6 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
   name: 'Recipe',
@@ -40,10 +40,17 @@ export default {
       type: Object,
       required: true
     }
+  },
+  computed: {
+    formattedIngredients() {
+      // 将ingredients对象转换为对象数组
+      return Object.entries(this.recipe.ingredients).map(([name, amount]) => {
+        return { name, amount };
+      });
+    }
   }
 };
 </script>
-
 <style scoped>
 .recipe {
   background: #ffffff;

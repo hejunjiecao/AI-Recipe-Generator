@@ -54,8 +54,12 @@ export default {
     return {
       file: null,
       showRecipe: false,
+<<<<<<< HEAD
       ingredients: [],
     //   ingredients: ['tomato', 'cheese', 'bread', 'lettuce', 'chicken'],
+=======
+      ingredients: [], 
+>>>>>>> 8cc12b9 (almost done)
       showIngredients: true,
       recipes: [],
       currentRecipeIndex: 0
@@ -82,8 +86,24 @@ export default {
           },
         });
         console.log(response.data.message);
+<<<<<<< HEAD
         this.ingredients = JSON.parse(response.data.message);
         this.file = null;
+=======
+        let ingredientsData = response.data.ingredients;
+        if (typeof ingredientsData === 'string') {
+          // 从字符串中提取数组部分并解析为 JSON 数组
+          const match = ingredientsData.match(/\[.*\]/);
+          if (match) {
+            ingredientsData = JSON.parse(match[0]);
+          } else {
+            console.error('Failed to parse ingredients:', ingredientsData);
+          }
+        }
+        this.ingredients = ingredientsData;
+        this.file = null;
+        this.showRecipe = false;
+>>>>>>> 8cc12b9 (almost done)
         this.showIngredients = true;
       } catch (error) {
         console.error('Error uploading file:', error);
@@ -92,19 +112,28 @@ export default {
     async generateRecipe() {
       this.showIngredients = false;
       this.showRecipe = true;
+<<<<<<< HEAD
     //   发送style和ingredients到后端
+=======
+      //发送style和ingredients到后端
+>>>>>>> 8cc12b9 (almost done)
       const style = this.selectedStyle;
       const data = {
         style: style,
         ingredients: this.ingredients
       };
+<<<<<<< HEAD
     //    请求后端recipe
+=======
+       //请求后端recipe
+>>>>>>> 8cc12b9 (almost done)
       try {
         const response = await axios.post('http://localhost:5008/generate', data, {
           headers: {
             'Content-Type': 'application/json',
           },
         });
+<<<<<<< HEAD
         this.recipes = response.data.recipes;
       } catch (error) {
         console.error('Error generating recipe:', error);
@@ -166,6 +195,12 @@ export default {
 //     }
 
 //   ];
+=======
+        this.recipes = response.data.recipes; 
+      } catch (error) {
+        console.error('Error generating recipe:', error);
+      }
+>>>>>>> 8cc12b9 (almost done)
     },
     nextRecipe() {
       if (this.currentRecipeIndex < this.recipes.length - 1) {
