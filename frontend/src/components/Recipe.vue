@@ -19,7 +19,7 @@
 
       </div>
       <div class="steps">
-        <h3>Steps</h3>
+        <h3 class="section-title">Steps</h3>
         <ol>
           <!-- <li v-for="(step, index) in recipe.steps" :key="index">
             {{ step }}
@@ -32,6 +32,7 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
   name: 'Recipe',
@@ -43,7 +44,6 @@ export default {
   },
   computed: {
     formattedIngredients() {
-      // 将ingredients对象转换为对象数组
       return Object.entries(this.recipe.ingredients).map(([name, amount]) => {
         return { name, amount };
       });
@@ -51,6 +51,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .recipe {
   background: #ffffff;
@@ -81,40 +82,42 @@ export default {
   color: #999;
 }
 
-.ingredients, .steps {
+.recipe-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.ingredients {
   margin-bottom: 20px;
 }
 
-h3 {
+.steps {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  text-align: center;
   font-size: 1.5em;
+  margin-bottom: 10px;
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
-  margin-bottom: 10px;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
+.ingredients-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);  /* 每行显示两个ingredient */
+  gap: 10px;
 }
 
-ul li::before {
-  content: '•';
-  color: #007BFF;
-  font-weight: bold;
-  display: inline-block;
-  width: 1em;
-  margin-left: -1em;
+.ingredient-item {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 ol {
   list-style: decimal inside;
   padding: 0;
-}
-
-.pagination-buttons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
-  width: 200px;
+  margin: 0;
 }
 </style>

@@ -26,8 +26,13 @@ def upload_image():
     save_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(save_path)
     print(f"File saved to: {save_path}")
-    reply = recog.recognize_food_ingredients(UPLOAD_FOLDER, save_path)
-    return jsonify({"ingredients": reply})  #返回的数据键名为ingredient
+
+    try:
+        reply = recog.recognize_food_ingredients(UPLOAD_FOLDER, save_path)
+        print(f"Recognized ingredients: {reply}")  # 打印识别的ingredients
+        return jsonify({"ingredients": reply})  # 确保返回的数据键名为ingredients
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):

@@ -54,15 +54,10 @@ export default {
     return {
       file: null,
       showRecipe: false,
-<<<<<<< HEAD
-      ingredients: [],
-    //   ingredients: ['tomato', 'cheese', 'bread', 'lettuce', 'chicken'],
-=======
       ingredients: [], 
->>>>>>> 8cc12b9 (almost done)
       showIngredients: true,
-      recipes: [],
-      currentRecipeIndex: 0
+      recipes: [], 
+      currentRecipeIndex: 0 
     };
   },
   methods: {
@@ -86,10 +81,6 @@ export default {
           },
         });
         console.log(response.data.message);
-<<<<<<< HEAD
-        this.ingredients = JSON.parse(response.data.message);
-        this.file = null;
-=======
         let ingredientsData = response.data.ingredients;
         if (typeof ingredientsData === 'string') {
           // 从字符串中提取数组部分并解析为 JSON 数组
@@ -103,7 +94,6 @@ export default {
         this.ingredients = ingredientsData;
         this.file = null;
         this.showRecipe = false;
->>>>>>> 8cc12b9 (almost done)
         this.showIngredients = true;
       } catch (error) {
         console.error('Error uploading file:', error);
@@ -112,95 +102,23 @@ export default {
     async generateRecipe() {
       this.showIngredients = false;
       this.showRecipe = true;
-<<<<<<< HEAD
-    //   发送style和ingredients到后端
-=======
       //发送style和ingredients到后端
->>>>>>> 8cc12b9 (almost done)
       const style = this.selectedStyle;
       const data = {
         style: style,
         ingredients: this.ingredients
       };
-<<<<<<< HEAD
-    //    请求后端recipe
-=======
        //请求后端recipe
->>>>>>> 8cc12b9 (almost done)
       try {
         const response = await axios.post('http://localhost:5008/generate', data, {
           headers: {
             'Content-Type': 'application/json',
           },
         });
-<<<<<<< HEAD
-        this.recipes = response.data.recipes;
-      } catch (error) {
-        console.error('Error generating recipe:', error);
-      }
-//       this.recipes = [
-//     {
-//       dishName: 'Spaghetti Carbonara',
-//       timeToPrepare: '30 minutes',
-//       ingredients: [
-//         { name: 'Spaghetti', amount: '200g' },
-//         { name: 'Eggs', amount: '2' },
-//         { name: 'Pancetta', amount: '100g' },
-//         { name: 'Parmesan cheese', amount: '50g' },
-//         { name: 'Black pepper', amount: 'to taste' }
-//       ],
-//       steps: [
-//         'Boil the spaghetti.',
-//         'Fry the pancetta.',
-//         'Mix eggs and cheese.',
-//         'Combine everything with spaghetti.',
-//         'Season with black pepper.'
-//       ]
-//     },
-//     {
-//       dishName: 'Chicken Alfredo',
-//       timeToPrepare: '40 minutes',
-//       ingredients: [
-//         { name: 'Fettuccine', amount: '200g' },
-//         { name: 'Chicken breast', amount: '2' },
-//         { name: 'Heavy cream', amount: '1 cup' },
-//         { name: 'Parmesan cheese', amount: '50g' },
-//         { name: 'Garlic', amount: '2 cloves' }
-//       ],
-//       steps: [
-//         'Cook the fettuccine.',
-//         'Sauté the chicken.',
-//         'Prepare the Alfredo sauce.',
-//         'Combine pasta and sauce.',
-//         'Serve with grated Parmesan.'
-//       ]
-//     },
-//     {
-//       dishName: 'Beef Stir Fry',
-//       timeToPrepare: '25 minutes',
-//       ingredients: [
-//         { name: 'Beef', amount: '300g' },
-//         { name: 'Broccoli', amount: '1 head' },
-//         { name: 'Soy sauce', amount: '1/4 cup' },
-//         { name: 'Garlic', amount: '3 cloves' },
-//         { name: 'Ginger', amount: '1 inch' }
-//       ],
-//       steps: [
-//         'Slice the beef.',
-//         'Chop the broccoli.',
-//         'Stir fry beef and broccoli.',
-//         'Add soy sauce, garlic, and ginger.',
-//         'Serve with rice.'
-//       ]
-//     }
-
-//   ];
-=======
         this.recipes = response.data.recipes; 
       } catch (error) {
         console.error('Error generating recipe:', error);
       }
->>>>>>> 8cc12b9 (almost done)
     },
     nextRecipe() {
       if (this.currentRecipeIndex < this.recipes.length - 1) {
