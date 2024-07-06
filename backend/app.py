@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 import json
+import re
 
 import recognizer as recog
 import recipe_generator as rcp_gen
@@ -10,35 +11,27 @@ app = Flask(__name__)
 CORS(app)
 
 UPLOAD_FOLDER = 'uploads'
-save_path = ''
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 @app.route("/uploads", methods=["POST"])
 def upload_image():
     if 'file' not in request.files:
-        return jsonify({"error": "No file part"})
+        return jsonify({"error": "No file part"}), 400
 
     file = request.files['file']
-
     if file.filename == '':
-        return jsonify({"error": "No selected file"})
+        return jsonify({"error": "No selected file"}), 400
 
     save_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(save_path)
-
     print(f"File saved to: {save_path}")
-
-
-    # Return recognized items as a JSON object:
-    # {"message": ["grapes","tofu","cheese spread"]}
     reply = recog.recognize_food_ingredients(UPLOAD_FOLDER, save_path)
-    return jsonify({"message": reply})
+    return jsonify({"ingredients": reply})  #返回的数据键名为ingredient
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
-
 
 @app.route("/generate", methods=["POST"])
 def generate_recipe():
@@ -47,7 +40,6 @@ def generate_recipe():
     # example:
     # {"style": "chinese", "ingredients": ["tomato","salad"]}
     data = request.get_json()
-
     if not data:
         return jsonify({"error": "No input data provided"}), 400
 
@@ -81,5 +73,4 @@ def home():
 # END OF TEST: recipe_generator
 
 if __name__ == '__main__':
-    # app.run(debug=True)
     app.run(host='0.0.0.0', port=5008, debug=True)
