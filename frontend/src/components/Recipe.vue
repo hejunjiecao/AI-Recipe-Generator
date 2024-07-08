@@ -8,17 +8,24 @@
       <div class="ingredients">
         <h3>Ingredients</h3>
         <ul>
-          <li v-for="(ingredient, index) in recipe.ingredients" :key="index">
+          <!-- <li v-for="(ingredient, index) in recipe.ingredients" :key="index">
             {{ ingredient.name }}: <strong>{{ ingredient.amount }}</strong>
-          </li>
+          </li> -->
+			<li v-for="(amount, ingredient) in recipe.ingredients" :key="ingredient">
+				{{ ingredient }}: {{ amount }}
+			</li>
         </ul>
+
       </div>
       <div class="steps">
         <h3>Steps</h3>
         <ol>
-          <li v-for="(step, index) in recipe.steps" :key="index">
+          <!-- <li v-for="(step, index) in recipe.steps" :key="index">
             {{ step }}
-          </li>
+          </li> -->
+			<li v-for="step in recipe.Steps" :key="step">
+						{{ step }}
+			</li>
         </ol>
       </div>
     </div>
