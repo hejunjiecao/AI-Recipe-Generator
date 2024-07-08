@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
+import json
 
-import setting
-import gpt
+import recognizer as recog
 import recipe_generator as rcp_gen
 
 app = Flask(__name__)
@@ -28,34 +28,56 @@ def upload_image():
     file.save(save_path)
 
     print(f"File saved to: {save_path}")
-    
+
+
+    # Return recognized items as a JSON object:
+    # {"message": ["grapes","tofu","cheese spread"]}
+    reply = recog.recognize_food_ingredients(UPLOAD_FOLDER, save_path)
+    return jsonify({"message": reply})
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
-# Assume the data contains a dictionary of ingredients
-    # example:
-    # {"tomato": "2 pieces", "cheese": "100 grams"}
-    # ingredients = data.get("ingredients", {})
-
-    # if not ingredients:
-    #     return jsonify({"error": "No ingredients provided"}), 400
 
 @app.route("/generate", methods=["POST"])
 def generate_recipe():
+
+    # Assume the data contains a dictionary of ingredients
+    # example:
+    # {"style": "chinese", "ingredients": ["tomato","salad"]}
     data = request.get_json()
 
     if not data:
         return jsonify({"error": "No input data provided"}), 400
-    
-    style = data.get("style",{})
 
+	# TODO: need to test the data format getting from frontend
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No input data provided"}), 400
+    style = data.get("style",{})
     if not style:
         style = "any"
-    # Process ingredients to generate a recipe
-    recipe = rcp_gen.generate_recipe_from_ingredients(data, style)
 
-    return jsonify({"recipe": recipe})
+    ingredients = data.get("ingredients", {})
+    if not ingredients:
+        ingredients = "[]"
+    # END OF TODO
+
+    # Process ingredients to generate a recipe
+    three_recipes = rcp_gen.generate_recipe_from_ingredients(data, style)
+    three_recipe_objs = []
+    for i in range(3):
+        cleaned = three_recipes[i][7:-3]
+        print(cleaned)
+        three_recipe_objs.append(json.loads(cleaned))
+    return jsonify({"recipes": three_recipe_objs})
+
+# TEST: recipe_generator
+@app.route("/")
+def home():
+    return send_from_directory('spec', 'recipe_gen.html')
+# END OF TEST: recipe_generator
 
 if __name__ == '__main__':
     # app.run(debug=True)

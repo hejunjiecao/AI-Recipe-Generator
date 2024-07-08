@@ -1,8 +1,8 @@
 api_base: "https://api.openai.com/v1/chat/completions"
 # api_key: "api-key-here"
-api_key: "sk-proj-TmEdrDkMq5jDl59Vo20sT3BlbkFJ3TgjTWuLZxhRUOakqmbt"
+api_key: "sk-proj-3mvkyonXbC7s2ZC9J8ttT3BlbkFJftMj1ySrmKY5AfXWSMpa"
 model: "gpt-4o"
-max_tokens: 300
+max_tokens: 500
 temperature: 1
 top_p: 1
 presence_penalty: 0

@@ -91,80 +91,80 @@ export default {
     async generateRecipe() {
       this.showIngredients = false;
       this.showRecipe = true;
-      // 发送style和ingredients到后端
-      // const style = this.selectedStyle;
-      // const data = {
-      //   style: style,
-      //   ingredients: this.ingredients
-      // };
-       //请求后端recipe
-      // try {
-      //   const response = await axios.post('http://localhost:5008/generate', data, {
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //   });
-      //   this.recipes = response.data.recipes; 
-      // } catch (error) {
-      //   console.error('Error generating recipe:', error);
-      // }
-      this.recipes = [
-    {
-      dishName: 'Spaghetti Carbonara',
-      timeToPrepare: '30 minutes',
-      ingredients: [
-        { name: 'Spaghetti', amount: '200g' },
-        { name: 'Eggs', amount: '2' },
-        { name: 'Pancetta', amount: '100g' },
-        { name: 'Parmesan cheese', amount: '50g' },
-        { name: 'Black pepper', amount: 'to taste' }
-      ],
-      steps: [
-        'Boil the spaghetti.',
-        'Fry the pancetta.',
-        'Mix eggs and cheese.',
-        'Combine everything with spaghetti.',
-        'Season with black pepper.'
-      ]
-    },
-    {
-      dishName: 'Chicken Alfredo',
-      timeToPrepare: '40 minutes',
-      ingredients: [
-        { name: 'Fettuccine', amount: '200g' },
-        { name: 'Chicken breast', amount: '2' },
-        { name: 'Heavy cream', amount: '1 cup' },
-        { name: 'Parmesan cheese', amount: '50g' },
-        { name: 'Garlic', amount: '2 cloves' }
-      ],
-      steps: [
-        'Cook the fettuccine.',
-        'Sauté the chicken.',
-        'Prepare the Alfredo sauce.',
-        'Combine pasta and sauce.',
-        'Serve with grated Parmesan.'
-      ]
-    },
-    {
-      dishName: 'Beef Stir Fry',
-      timeToPrepare: '25 minutes',
-      ingredients: [
-        { name: 'Beef', amount: '300g' },
-        { name: 'Broccoli', amount: '1 head' },
-        { name: 'Soy sauce', amount: '1/4 cup' },
-        { name: 'Garlic', amount: '3 cloves' },
-        { name: 'Ginger', amount: '1 inch' }
-      ],
-      steps: [
-        'Slice the beef.',
-        'Chop the broccoli.',
-        'Stir fry beef and broccoli.',
-        'Add soy sauce, garlic, and ginger.',
-        'Serve with rice.'
-      ]
-    }
-  
-  ];
+    //   发送style和ingredients到后端
+      const style = this.selectedStyle;
+      const data = {
+        style: style,
+        ingredients: this.ingredients
+      };
+    //    请求后端recipe
+      try {
+        const response = await axios.post('http://localhost:5008/generate', data, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        this.recipes = response.data.recipes;
+      } catch (error) {
+        console.error('Error generating recipe:', error);
+      }
+//       this.recipes = [
+//     {
+//       dishName: 'Spaghetti Carbonara',
+//       timeToPrepare: '30 minutes',
+//       ingredients: [
+//         { name: 'Spaghetti', amount: '200g' },
+//         { name: 'Eggs', amount: '2' },
+//         { name: 'Pancetta', amount: '100g' },
+//         { name: 'Parmesan cheese', amount: '50g' },
+//         { name: 'Black pepper', amount: 'to taste' }
+//       ],
+//       steps: [
+//         'Boil the spaghetti.',
+//         'Fry the pancetta.',
+//         'Mix eggs and cheese.',
+//         'Combine everything with spaghetti.',
+//         'Season with black pepper.'
+//       ]
+//     },
+//     {
+//       dishName: 'Chicken Alfredo',
+//       timeToPrepare: '40 minutes',
+//       ingredients: [
+//         { name: 'Fettuccine', amount: '200g' },
+//         { name: 'Chicken breast', amount: '2' },
+//         { name: 'Heavy cream', amount: '1 cup' },
+//         { name: 'Parmesan cheese', amount: '50g' },
+//         { name: 'Garlic', amount: '2 cloves' }
+//       ],
+//       steps: [
+//         'Cook the fettuccine.',
+//         'Sauté the chicken.',
+//         'Prepare the Alfredo sauce.',
+//         'Combine pasta and sauce.',
+//         'Serve with grated Parmesan.'
+//       ]
+//     },
+//     {
+//       dishName: 'Beef Stir Fry',
+//       timeToPrepare: '25 minutes',
+//       ingredients: [
+//         { name: 'Beef', amount: '300g' },
+//         { name: 'Broccoli', amount: '1 head' },
+//         { name: 'Soy sauce', amount: '1/4 cup' },
+//         { name: 'Garlic', amount: '3 cloves' },
+//         { name: 'Ginger', amount: '1 inch' }
+//       ],
+//       steps: [
+//         'Slice the beef.',
+//         'Chop the broccoli.',
+//         'Stir fry beef and broccoli.',
+//         'Add soy sauce, garlic, and ginger.',
+//         'Serve with rice.'
+//       ]
+//     }
+
+//   ];
     },
     nextRecipe() {
       if (this.currentRecipeIndex < this.recipes.length - 1) {
