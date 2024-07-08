@@ -54,11 +54,11 @@ export default {
     return {
       file: null,
       showRecipe: false,
-      //ingredients: [],
-      ingredients: ['tomato', 'cheese', 'bread', 'lettuce', 'chicken'], 
+      ingredients: [],
+    //   ingredients: ['tomato', 'cheese', 'bread', 'lettuce', 'chicken'],
       showIngredients: true,
-      recipes: [], 
-      currentRecipeIndex: 0 
+      recipes: [],
+      currentRecipeIndex: 0
     };
   },
   methods: {
@@ -82,8 +82,9 @@ export default {
           },
         });
         console.log(response.data.message);
+        this.ingredients = JSON.parse(response.data.message);
         this.file = null;
-        this.showRecipe = true;
+        this.showIngredients = true;
       } catch (error) {
         console.error('Error uploading file:', error);
       }
