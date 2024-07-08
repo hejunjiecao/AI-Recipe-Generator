@@ -68,7 +68,8 @@ def generate_recipe():
     three_recipes = rcp_gen.generate_recipe_from_ingredients(data, style)
     three_recipe_objs = []
     for i in range(3):
-        cleaned = three_recipes[i][7:-3]
+        cleaned = three_recipes[i][7:-3].replace("'", '"')
+        print("cleaned:!!!!")
         print(cleaned)
         three_recipe_objs.append(json.loads(cleaned))
     return jsonify({"recipes": three_recipe_objs})
