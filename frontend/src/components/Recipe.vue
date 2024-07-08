@@ -45,7 +45,7 @@ export default {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   max-width: 600px;
   width: 100%;
-  margin-top: 10px; 
+  margin-top: 10px;
 }
 
 .recipe-header {
