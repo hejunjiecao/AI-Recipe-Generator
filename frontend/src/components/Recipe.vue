@@ -7,26 +7,18 @@
     <div class="recipe-body">
       <div class="ingredients">
         <h3>Ingredients</h3>
-        <ul>
-          <!-- <li v-for="(ingredient, index) in recipe.ingredients" :key="index">
-            {{ ingredient.name }}: <strong>{{ ingredient.amount }}</strong>
-          </li>-->
-          <li v-for="(amount, ingredient) in recipe.ingredients" :key="ingredient">
-				{{ ingredient }}: {{ amount }}
-			</li>
-        </ul>
-        
-
+        <div class="ingredients-grid">
+          <div class="ingredient-item" v-for="(amount, ingredient) in recipe.ingredients" :key="ingredient">
+            {{ ingredient }}: {{ amount }}
+          </div>
+        </div>
       </div>
       <div class="steps">
-        <h3 class="section-title">Steps</h3>
+        <h3>Steps</h3>
         <ol>
-          <!-- <li v-for="(step, index) in recipe.steps" :key="index">
+          <li v-for="(step, index) in recipe.Steps" :key="index">
             {{ step }}
-          </li> -->
-			<li v-for="step in recipe.Steps" :key="step">
-						{{ step }}
-			</li>
+          </li>
         </ol>
       </div>
     </div>
@@ -40,13 +32,6 @@ export default {
     recipe: {
       type: Object,
       required: true
-    }
-  },
-  computed: {
-    formattedIngredients() {
-      return Object.entries(this.recipe.ingredients).map(([name, amount]) => {
-        return { name, amount };
-      });
     }
   }
 };
@@ -91,28 +76,20 @@ export default {
   margin-bottom: 20px;
 }
 
-.steps {
-  margin-bottom: 20px;
-}
-
-.section-title {
-  text-align: center;
-  font-size: 1.5em;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
-}
-
 .ingredients-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);  /* 每行显示两个ingredient */
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
 .ingredient-item {
-  background-color: #f8f9fa;
+  background: #f8f9fa;
   padding: 10px;
   border-radius: 5px;
+}
+
+.steps {
+  margin-bottom: 20px;
 }
 
 ol {

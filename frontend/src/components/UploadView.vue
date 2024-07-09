@@ -17,6 +17,9 @@
       Generate
     </b-button>
 
+    <!-- 加载按钮 -->
+    <div v-if="isLoading" class="loader"></div>
+
     <div v-if="showIngredients" class="ingredients-container">
       <div v-for="(ingredient, index) in ingredients" :key="index" class="ingredient-button">
         <button class="ingredient">{{ ingredient }}</button>
@@ -27,7 +30,7 @@
 
     <div v-if="showRecipe">
       <Recipe :recipe="recipes[currentRecipeIndex]" />
-      <div class="pagination-buttons">
+      <div v-if="isRecipeLoaded" class="pagination-buttons">
         <button @click="prevRecipe" :disabled="currentRecipeIndex === 0">Previous</button>
         <button @click="nextRecipe" :disabled="currentRecipeIndex === recipes.length - 1">Next</button>
       </div>
@@ -54,10 +57,12 @@ export default {
     return {
       file: null,
       showRecipe: false,
-      ingredients: [], 
+      ingredients: [],
       showIngredients: true,
-      recipes: [], 
-      currentRecipeIndex: 0 
+      recipes: [],
+      currentRecipeIndex: 0,
+      isLoading: false, // 加载状态
+      isRecipeLoaded: false // Recipe加载状态
     };
   },
   methods: {
@@ -71,6 +76,8 @@ export default {
     async uploadImage() {
       if (!this.file) return;
 
+      this.isLoading = true; // 开始加载
+
       const formData = new FormData();
       formData.append('file', this.file);
 
@@ -83,7 +90,6 @@ export default {
         console.log(response.data.message);
         let ingredientsData = response.data.ingredients;
         if (typeof ingredientsData === 'string') {
-          // 从字符串中提取数组部分并解析为 JSON 数组
           const match = ingredientsData.match(/\[.*\]/);
           if (match) {
             ingredientsData = JSON.parse(match[0]);
@@ -97,27 +103,33 @@ export default {
         this.showIngredients = true;
       } catch (error) {
         console.error('Error uploading file:', error);
+      } finally {
+        this.isLoading = false; // 结束加载
       }
     },
     async generateRecipe() {
+      this.isLoading = true; // 开始加载
+      this.isRecipeLoaded = false; // 还未加载recipe
+
       this.showIngredients = false;
       this.showRecipe = true;
-      //发送style和ingredients到后端
       const style = this.selectedStyle;
       const data = {
         style: style,
         ingredients: this.ingredients
       };
-       //请求后端recipe
       try {
         const response = await axios.post('http://localhost:5008/generate', data, {
           headers: {
             'Content-Type': 'application/json',
           },
         });
-        this.recipes = response.data.recipes; 
+        this.recipes = response.data.recipes;
+        this.isRecipeLoaded = true; // recipe加载完成
       } catch (error) {
         console.error('Error generating recipe:', error);
+      } finally {
+        this.isLoading = false; // 结束加载
       }
     },
     nextRecipe() {
@@ -146,6 +158,39 @@ export default {
 </script>
 
 <style>
+/* 调整加载按钮尺寸 */
+.loader {
+  border: 4px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 4px solid #3498db;
+  width: 30px;  /* 调整宽度 */
+  height: 30px; /* 调整高度 */
+  animation: spin 2s linear infinite;
+  margin-top: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+.ingredient {
+  background-color: #6aa84f;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 150px; 
+  height: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; 
+}
+
+
 html, body, #upload {
   height: 100%;
   margin: 0;
@@ -180,17 +225,6 @@ html, body, #upload {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.ingredient {
-  background-color: #6aa84f;
-  color: white;
-  border: none;
-  padding: 10px;
-  width: 100px;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: center;
 }
 
 .remove-button {
