@@ -1,19 +1,37 @@
 <template>
   <div id="app">
-    <Header />
+    <Header @style-changed="handleStyleChange" />
     <main class="main-content">
-      <router-view />
+      <upload-view :selected-style="selectedStyle" />
     </main>
   </div>
 </template>
 
 <script>
 import Header from './components/Header.vue';
+import UploadView from './components/UploadView.vue';
 
 export default {
   name: 'App',
   components: {
-    Header
+    Header,
+    UploadView
+  },
+  data() {
+    return {
+      selectedStyle: 'Chinese'
+    };
+  },
+  methods: {
+    handleStyleChange(newStyle) {
+      this.selectedStyle = newStyle;
+    },
+    updateTitle() {
+      document.title = 'aicooking'; 
+    }
+  },
+  mounted() {
+    this.updateTitle();
   }
 };
 </script>
@@ -31,7 +49,7 @@ export default {
 
 .main-content {
   padding: 20px;
-  padding-top: 80px; /* 避免内容被Header遮挡 */
-  background-color: #f8f9fa; /* 浅灰色背景 */
+  padding-top: 80px;
+  background-color: #f8f9fa;
 }
 </style>
