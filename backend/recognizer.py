@@ -29,7 +29,7 @@ def recognize_food_ingredients(upload_folder, save_path):
     result, reply = gpt.process_response(myGPT.query(msgs), myGPT.model)
     if not result:
         print("Error! See the details below.")
-    print(reply)
+    # print(reply)
     match = re.search(r'\[.*\]', reply)
     if match:
         cleaned_reply = match.group(0)

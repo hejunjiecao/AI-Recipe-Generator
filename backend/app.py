@@ -25,7 +25,7 @@ def upload_image():
 
     save_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(save_path)
-    print(f"File saved to: {save_path}")
+    # print(f"File saved to: {save_path}")
 
     try:
         reply = recog.recognize_food_ingredients(UPLOAD_FOLDER, save_path)
@@ -48,7 +48,6 @@ def generate_recipe():
     if not data:
         return jsonify({"error": "No input data provided"}), 400
 
-	# TODO: need to test the data format getting from frontend
     data = request.get_json()
     if not data:
         return jsonify({"error": "No input data provided"}), 400
@@ -59,7 +58,6 @@ def generate_recipe():
     ingredients = data.get("ingredients", {})
     if not ingredients:
         ingredients = "[]"
-    # END OF TODO
 
     # Process ingredients to generate a recipe
     three_recipes = rcp_gen.generate_recipe_from_ingredients(data, style)
