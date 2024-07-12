@@ -35,12 +35,10 @@ def generate_recipe_from_ingredients(ingredients, style):
 		result, reply = gpt.process_response(myGPT.query(msg_based_on_creativity), myGPT.model)
 		if not result:
 			print("Error when generating recipe %i! See the deatils below." % (i+1))
-			# TEST reply
 			print(reply)
-			# END OF TEST
 			reply = ""
 		# TEST reply
-		print(reply)
+		# print(reply)
 		# END OF TEST
 		three_res.append(reply)
 	return three_res
