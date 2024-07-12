@@ -30,7 +30,7 @@ class MyGPT:
               "text": prompt
           }
       ]
-      print(img_paths)
+    #   print(img_paths)
       if img_paths == None:
          return content
       for img_path in img_paths:
@@ -46,7 +46,7 @@ class MyGPT:
       return content
 
     def query(self, msgs):
-      print(self.model)
+    #   print(self.model)
       encoded_msgs = []
       for msg in msgs:
         # if (msg.imgs) != None:
@@ -74,8 +74,8 @@ def process_response(response, GPTModel):
   # Intended behaviour of this function:
   # returns True, "textual reply from GPT", and prints the cost at the same time
   # OR returns False, "reason why the error occurs"
-  print("response: ")
-  print(response)
+#   print("response: ")
+#   print(response)
   if "error" not in response:
     usage = response["usage"]
     prompt_tokens = usage["prompt_tokens"]
